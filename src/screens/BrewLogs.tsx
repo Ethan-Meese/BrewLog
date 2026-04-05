@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Dashboard() {  // ✅ default export
+export default function BrewLogs() {
   return (
     <View style={styles.container}>
-      <Text>Signup</Text>
+      <Text>Brew Log Screen!</Text>
     </View>
   );
 }

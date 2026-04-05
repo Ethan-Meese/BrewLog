@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Dashboard() {  // ✅ default export
+export default function Settings() {  // ✅ default export
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
+      <Text>Settings Screen!</Text>
     </View>
   );
 }
