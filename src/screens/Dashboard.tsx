@@ -1,7 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
-let welcomeMessege:string[] = ["Welcome", "Goodmorning!", "Another day another coffee!", "What are we feeling today?", "It's coffee time!", "I hope you're doing well!", "Todays a good day!", "Lets be honest...Nothing beats coffee"];
+let welcomeMessege:string[] = ["Welcome", "Goodmorning!", "Another day another coffee!", 
+                              "What are we feeling today?", "It's coffee time!", "I hope you're doing well!", 
+                              "Todays a good day!", "Lets be honest...Nothing beats coffee"];
+                              
 function getRandomNumber(): number{
   return Math.floor(Math.random() * welcomeMessege.length)
 }

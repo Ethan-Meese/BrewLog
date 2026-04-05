@@ -1,6 +1,16 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
+import {brewLogs} from './BrewLogs';
+export interface Brew {
+  _coffeeName:string;
+  _coffeeType:string;
+  _brewMethod:string;
+  _grinder:string;
+  _grindSize:string;
+  _rating:string;
+  _notes:string;
+};
 
 
 export default function AddBrew({navigation}: any) {
@@ -15,9 +25,23 @@ export default function AddBrew({navigation}: any) {
 
   const handleSave = () => {
     // store brew locally later
-    console.log({coffeeName, coffeeType, brewMethod, grinder, grindSize, rating, notes});
+    var newBrew: Brew = {
+      _coffeeName: coffeeName, 
+      _coffeeType: coffeeType, 
+      _brewMethod:brewMethod, 
+      _grinder:grinder, 
+      _grindSize:grindSize, 
+      _rating:rating, 
+      _notes:notes
+    };
+    console.log(newBrew);
+    brewLogs.push(newBrew);
+    navigation.goBack();
+
   };
 
+  //Maybe change how list is done because styling is very limited
+  //Maybe change the rating to do number input only
   return (
     <View style={styles.container}>
       <Text>Add Brew Screen!</Text>
@@ -33,7 +57,7 @@ export default function AddBrew({navigation}: any) {
       onChangeText={setCoffeeType}
       />
 
-      <Text>Brew Method</Text> // Maybe change how list is done because styling is very limited
+      <Text>Brew Method</Text> 
         <Picker selectedValue={brewMethod}
         onValueChange={(itemValue) => setBrewMethod(itemValue)} style={{width:"50%"}}>
           <Picker.Item label="Espresso" value="Espresso"/>
@@ -55,7 +79,7 @@ export default function AddBrew({navigation}: any) {
         value={grindSize}
         onChangeText={setGrindSize}/>
 
-        <Text>Rating</Text> //Maybe change to do number only
+        <Text>Rating</Text> 
         <TextInput placeholder="Enter number rating"
         value={rating}
         onChangeText={setRating}/>
