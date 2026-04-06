@@ -9,6 +9,20 @@ export default function BrewLogs() {
     <View style={styles.container}>
       <Text>Brew Log Screen!</Text>
       <Text>You have {brewLogs.length} brew logs!</Text>
+      <Text></Text>
+
+        {brewLogs.map((brew, index) => (
+          <View key={index}>
+            <Text>{brew._coffeeName}</Text> 
+            <Text>{brew._coffeeType} </Text>
+            <Text>{brew._brewMethod}</Text>
+            <Text>{brew._grinder}</Text>
+            <Text>{brew._grindSize}</Text>
+            <Text>{brew._rating} </Text>
+            <Text>{brew._notes}</Text>
+            <Text></Text>
+          </View>
+        ))}
     </View>
   );
 }

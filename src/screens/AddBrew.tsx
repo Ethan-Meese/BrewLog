@@ -45,6 +45,7 @@ export default function AddBrew({navigation}: any) {
   return (
     <View style={styles.container}>
       <Text>Add Brew Screen!</Text>
+      <Text></Text>
       <Text>Coffee Name</Text>
       <TextInput placeholder="Enter coffee name"
       value={coffeeName}
