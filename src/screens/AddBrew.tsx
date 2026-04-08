@@ -5,6 +5,7 @@ import {brewLogs} from './BrewLogs';
 export interface Brew {
   _coffeeName:string;
   _coffeeType:string;
+  _coffeeDose: string;
   _brewMethod:string;
   _grinder:string;
   _grindSize:string;
@@ -12,11 +13,34 @@ export interface Brew {
   _notes:string;
 };
 
+type BrewInputProps = {
+  label: string;
+  value: string;
+  onChange: (text: string) => void;
+  placeholder?: string;
+  keyboardType?: "default" | "numeric";
+};
+
+function BrewInput({label, value, onChange, placeholder, keyboardType = "default"}: BrewInputProps){
+  return(
+    <View>
+      <Text>{label}</Text>
+      <TextInput 
+      value={value}
+      onChangeText={onChange}
+      placeholder={placeholder}
+      keyboardType={keyboardType}
+      />
+    </View>
+  );
+}
+
 
 export default function AddBrew({navigation}: any) {
 
   const [coffeeName, setCoffeeName] = useState("")
   const [coffeeType, setCoffeeType] = useState("");
+  const [coffeeDose, setCoffeeDose] = useState("");
   const [brewMethod, setBrewMethod] = useState("Espresso");
   const [grinder, setGrinder] = useState("");
   const [grindSize, setGrindSize] = useState("");
@@ -27,12 +51,13 @@ export default function AddBrew({navigation}: any) {
     // store brew locally later
     var newBrew: Brew = {
       _coffeeName: coffeeName, 
-      _coffeeType: coffeeType, 
-      _brewMethod:brewMethod, 
-      _grinder:grinder, 
-      _grindSize:grindSize, 
-      _rating:rating, 
-      _notes:notes
+      _coffeeType: coffeeType,
+      _coffeeDose: coffeeDose,
+      _brewMethod: brewMethod, 
+      _grinder: grinder, 
+      _grindSize: grindSize, 
+      _rating: rating, 
+      _notes: notes
     };
     console.log(newBrew);
     brewLogs.push(newBrew);
@@ -43,22 +68,13 @@ export default function AddBrew({navigation}: any) {
   //Maybe change how list is done because styling is very limited
   //Maybe change the rating to do number input only
   return (
+
     <View style={styles.container}>
       <Text>Add Brew Screen!</Text>
       <Text></Text>
-      <Text>Coffee Name</Text>
-      <TextInput placeholder="Enter coffee name"
-      value={coffeeName}
-      onChangeText={setCoffeeName}
-      />
-
-      <Text>Coffee Origin</Text>
-      <TextInput placeholder="Enter coffee origin"
-      value={coffeeType}
-      onChangeText={setCoffeeType}
-      />
 
       <Text>Brew Method</Text> 
+
         <Picker selectedValue={brewMethod}
         onValueChange={(itemValue) => setBrewMethod(itemValue)} style={{width:"50%"}}>
           <Picker.Item label="Espresso" value="Espresso"/>
@@ -70,27 +86,30 @@ export default function AddBrew({navigation}: any) {
           <Picker.Item label="Cold Brew" value="Cold Brew"/>
         </Picker>
 
-        <Text>Grinder</Text>
-        <TextInput placeholder="Grinder"
-        value={grinder}
-        onChangeText={setGrinder}/>
+      {brewMethod === "Espresso" &&(
+        <Text>Testing for Espresso</Text>
+      )}
 
-        <Text>Grind Size</Text>
-        <TextInput placeholder="Enter grind size"
-        value={grindSize}
-        onChangeText={setGrindSize}/>
+      {brewMethod === "Pour-Over" &&(
+        <Text>Testing for Pour-Over</Text>
+      )}
+      
+      <BrewInput label='Coffee Name' value={coffeeName} onChange={setCoffeeName} placeholder='Enter coffee name...'/>
 
-        <Text>Rating</Text> 
-        <TextInput placeholder="Enter number rating"
-        value={rating}
-        onChangeText={setRating}/>
+      <BrewInput label='Coffee Origin' value={coffeeType} onChange={setCoffeeType} placeholder='Enter coffee Origin...'/>
 
-        <Text>Notes</Text>
-        <TextInput placeholder="Enter any notes"
-        value={notes}
-        onChangeText={setNotes}/>
+      <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee Dose...'/>
 
-        <Button title="Save Brew Log ☕" onPress={handleSave}/>
+      <BrewInput label='Grinder' value={grinder} onChange={setGrinder} placeholder='Enter grinder...'/>
+
+      <BrewInput label='Grind Size' value={grindSize} onChange={setGrindSize} placeholder='Enter grind size...'/>
+
+      <BrewInput label='Rating' value={rating} onChange={setRating} placeholder='Enter rating...'/>
+
+      <BrewInput label='Notes' value={notes} onChange={setNotes} placeholder='Enter notes...'/>
+
+      <Button title="Save Brew Log ☕" onPress={handleSave}/>
+
     </View>
   );
 }

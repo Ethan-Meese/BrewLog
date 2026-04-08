@@ -13,9 +13,9 @@ export default function BrewLogs() {
 
         {brewLogs.map((brew, index) => (
           <View key={index}>
+            <Text>{brew._brewMethod}</Text>
             <Text>{brew._coffeeName}</Text> 
             <Text>{brew._coffeeType} </Text>
-            <Text>{brew._brewMethod}</Text>
             <Text>{brew._grinder}</Text>
             <Text>{brew._grindSize}</Text>
             <Text>{brew._rating} </Text>
