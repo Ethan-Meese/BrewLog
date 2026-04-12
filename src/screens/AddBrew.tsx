@@ -3,10 +3,14 @@ import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
 import {brewLogs} from './BrewLogs';
 export interface Brew {
+  _brewMethod:string;
   _coffeeName:string;
   _coffeeType:string;
   _coffeeDose: string;
-  _brewMethod:string;
+  _water: string;
+  _ratio: string | null;
+  _waterTemp?: string;
+  _time?: string;
   _grinder:string;
   _grindSize:string;
   _rating:string;
@@ -25,7 +29,7 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
   return(
     <View>
       <Text>{label}</Text>
-      <TextInput 
+      <TextInput
       value={value}
       onChangeText={onChange}
       placeholder={placeholder}
@@ -38,22 +42,38 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
 
 export default function AddBrew({navigation}: any) {
 
+  const [brewMethod, setBrewMethod] = useState("Espresso");
   const [coffeeName, setCoffeeName] = useState("")
   const [coffeeType, setCoffeeType] = useState("");
   const [coffeeDose, setCoffeeDose] = useState("");
-  const [brewMethod, setBrewMethod] = useState("Espresso");
+  const [water, setWater] = useState("");
+  // Ratio is made down below
+  const [waterTemp, setWaterTemp] = useState("");
+  const [time, setTime] = useState("");
   const [grinder, setGrinder] = useState("");
   const [grindSize, setGrindSize] = useState("");
   const [rating, setRating] = useState("");
   const [notes, setNotes] = useState("");
 
+
+  // Making the ratio calculation and converting it to work with the Text tag
+  const doseNumber: number = parseFloat(coffeeDose);
+  const waterNumber: number = parseFloat(water);
+  const ratio: string | null = !isNaN(doseNumber) && doseNumber > 0 && !isNaN(waterNumber) ? (waterNumber / doseNumber).toFixed(1) : null;
+  console.log(ratio);
+
+
   const handleSave = () => {
     // store brew locally later
     var newBrew: Brew = {
+      _brewMethod: brewMethod, 
       _coffeeName: coffeeName, 
       _coffeeType: coffeeType,
       _coffeeDose: coffeeDose,
-      _brewMethod: brewMethod, 
+      _water: water,
+      _ratio: ratio,
+      _waterTemp: waterTemp,
+      _time: time,
       _grinder: grinder, 
       _grindSize: grindSize, 
       _rating: rating, 
@@ -86,19 +106,30 @@ export default function AddBrew({navigation}: any) {
           <Picker.Item label="Cold Brew" value="Cold Brew"/>
         </Picker>
 
-      {brewMethod === "Espresso" &&(
-        <Text>Testing for Espresso</Text>
-      )}
-
-      {brewMethod === "Pour-Over" &&(
-        <Text>Testing for Pour-Over</Text>
-      )}
-      
       <BrewInput label='Coffee Name' value={coffeeName} onChange={setCoffeeName} placeholder='Enter coffee name...'/>
 
-      <BrewInput label='Coffee Origin' value={coffeeType} onChange={setCoffeeType} placeholder='Enter coffee Origin...'/>
+      <BrewInput label='Coffee Origin' value={coffeeType} onChange={setCoffeeType} placeholder='Enter coffee origin...'/>
 
-      <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee Dose...'/>
+      <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee dose...'/>
+
+
+      {brewMethod !== "Espresso" &&(
+        <>
+          <BrewInput label='Water Amount' value={water} onChange={setWater} placeholder='Enter water amount...' />
+          <Text>{ratio !== null ? `Ratio is 1:${ratio}` : "Enter dose and water to get the ratio"}</Text>
+        </>
+      )}
+      
+      {brewMethod === "Espresso" &&(
+        <>
+        <BrewInput label='Espresso Yield' value={water} onChange={setWater} placeholder='Espresso yield...' />
+        <Text>{ratio !== null ? `Ratio is 1:${ratio}` : "Enter dose and yield to get the ratio"}</Text>
+        </>
+      )}
+
+      <BrewInput label='Water Tempature' value={waterTemp} onChange={setWaterTemp} placeholder='Enter water tempature...'/>
+
+      <BrewInput label='Brew Time' value={time} onChange={setTime} placeholder='Enter brew time...' />
 
       <BrewInput label='Grinder' value={grinder} onChange={setGrinder} placeholder='Enter grinder...'/>
 
