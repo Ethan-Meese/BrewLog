@@ -5,7 +5,7 @@ import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler
 
 export let brewLogs:Brew[] = [];
 
-export default function BrewLogs() {
+export default function BrewLogs({navigation}: any) {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>

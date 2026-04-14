@@ -63,7 +63,7 @@ export default function AddBrew({navigation}: any) {
   console.log(ratio);
 
 
-  const handleSave = () => {
+  const handleBrewSave = () => {
     // store brew locally later
     var newBrew: Brew = {
       _brewMethod: brewMethod, 
@@ -139,7 +139,7 @@ export default function AddBrew({navigation}: any) {
 
       <BrewInput label='Notes' value={notes} onChange={setNotes} placeholder='Enter notes...'/>
 
-      <Button title="Save Brew Log ☕" onPress={handleSave}/>
+      <Button title="Save Brew Log ☕" onPress={handleBrewSave}/>
 
     </View>
   );

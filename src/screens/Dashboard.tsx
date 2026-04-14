@@ -15,6 +15,10 @@ export default function Dashboard({navigation}: any) {
       <Text>{welcomeMessege[getRandomNumber()]}</Text>
       <Button title="Add Brew" onPress={() => navigation.navigate("Add Brew")}/>
       <Button title="Brew Logs" onPress={() => navigation.navigate("Brew Logs")}/>
+      <Button title="Coffees" onPress={() => navigation.navigate("Coffees")}/>
+      <Button title="Grinders" onPress={() => navigation.navigate("Grinders")}/>
+      <Button title="Add Coffee" onPress={() => navigation.navigate("Add Coffee")}/>
+      <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
       <Button title="Settings" onPress={() => navigation.navigate("Settings")}/>
     </View>
   );
