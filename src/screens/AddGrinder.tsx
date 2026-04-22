@@ -4,7 +4,7 @@ import { grinders } from './Grinders';
 
 
 export interface Grinder{
-    _grinderName: string;
+    _grinderName?: string;
     _notes?: string;
 };
 

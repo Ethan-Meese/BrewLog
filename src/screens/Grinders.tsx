@@ -5,6 +5,7 @@ import { Grinder } from './AddGrinder';
 
 export let grinders:Grinder[] = [];
 
+
 export default function Ginders({navigation}: any) {
   return (
     <GestureHandlerRootView style={styles.container}>

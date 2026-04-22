@@ -1,17 +1,20 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
 import {brewLogs} from './BrewLogs';
+import { grinders } from './Grinders';
+import { Grinder } from './AddGrinder';
+import { coffees } from './Coffees';
+import { Coffee } from './AddCoffee';
 export interface Brew {
-  _brewMethod:string;
-  _coffeeName:string;
-  _coffeeType:string;
+  _brewMethod: string;
+  _coffee: Coffee | null;
   _coffeeDose: string;
   _water: string;
   _ratio: string | null;
   _waterTemp?: string;
   _time?: string;
-  _grinder:string;
+  _grinder: Grinder | null;
   _grindSize:string;
   _rating:string;
   _notes:string;
@@ -43,14 +46,15 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
 export default function AddBrew({navigation}: any) {
 
   const [brewMethod, setBrewMethod] = useState("Espresso");
-  const [coffeeName, setCoffeeName] = useState("")
-  const [coffeeType, setCoffeeType] = useState("");
+  const [coffeeIndex, setCoffeeIndex] = useState(0);
+  const selectedCoffee = coffees[coffeeIndex] ?? null;
   const [coffeeDose, setCoffeeDose] = useState("");
   const [water, setWater] = useState("");
   // Ratio is made down below
   const [waterTemp, setWaterTemp] = useState("");
   const [time, setTime] = useState("");
-  const [grinder, setGrinder] = useState("");
+  const [grinderIndex, setGrinderIndex] = useState(0);
+  const selectedGrinder = grinders[grinderIndex] ?? null;
   const [grindSize, setGrindSize] = useState("");
   const [rating, setRating] = useState("");
   const [notes, setNotes] = useState("");
@@ -67,14 +71,13 @@ export default function AddBrew({navigation}: any) {
     // store brew locally later
     var newBrew: Brew = {
       _brewMethod: brewMethod, 
-      _coffeeName: coffeeName, 
-      _coffeeType: coffeeType,
+      _coffee: selectedCoffee,
       _coffeeDose: coffeeDose,
       _water: water,
       _ratio: ratio,
       _waterTemp: waterTemp,
       _time: time,
-      _grinder: grinder, 
+      _grinder: selectedGrinder, 
       _grindSize: grindSize, 
       _rating: rating, 
       _notes: notes
@@ -82,14 +85,12 @@ export default function AddBrew({navigation}: any) {
     console.log(newBrew);
     brewLogs.push(newBrew);
     navigation.goBack();
-
   };
 
   //Maybe change how list is done because styling is very limited
   //Maybe change the rating to do number input only
   return (
-
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text>Add Brew Screen!</Text>
       <Text></Text>
 
@@ -106,9 +107,26 @@ export default function AddBrew({navigation}: any) {
           <Picker.Item label="Cold Brew" value="Cold Brew"/>
         </Picker>
 
-      <BrewInput label='Coffee Name' value={coffeeName} onChange={setCoffeeName} placeholder='Enter coffee name...'/>
+        {coffees.length === 0 && (
+          <>  
+          <Text>Please add a coffee!</Text>
+          <Button title="Add Coffee" onPress={() => navigation.navigate("Add Coffee")}/>
+          </>
+        )}
 
-      <BrewInput label='Coffee Origin' value={coffeeType} onChange={setCoffeeType} placeholder='Enter coffee origin...'/>
+        {coffees.length > 0 &&
+        <Picker
+          selectedValue={coffeeIndex}
+          onValueChange={(itemValue) => setCoffeeIndex(itemValue)}
+          style={{ width: "50%" }}
+        >
+          {coffees.map((coffee, index) => (
+            <Picker.Item
+              key={index}
+              label={coffee._coffeeName}
+              value={index}/>
+          ))}
+        </Picker>}
 
       <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee dose...'/>
 
@@ -131,7 +149,25 @@ export default function AddBrew({navigation}: any) {
 
       <BrewInput label='Brew Time' value={time} onChange={setTime} placeholder='Enter brew time...' />
 
-      <BrewInput label='Grinder' value={grinder} onChange={setGrinder} placeholder='Enter grinder...'/>
+      {grinders.length === 0 && (
+        <>  
+        <Text>Please add a grinder!</Text>
+        <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
+        </>
+      )}
+
+      {grinders.length > 0 && 
+        <Picker
+            selectedValue={grinderIndex}
+            onValueChange={(itemValue) => setGrinderIndex(itemValue)}
+            style={{ width: "50%" }}>
+            {grinders.map((grinder, index) => (
+              <Picker.Item
+                key={index}
+                label={grinder._grinderName}
+                value={index}/>
+            ))}
+        </Picker>}
 
       <BrewInput label='Grind Size' value={grindSize} onChange={setGrindSize} placeholder='Enter grind size...'/>
 
@@ -141,10 +177,11 @@ export default function AddBrew({navigation}: any) {
 
       <Button title="Save Brew Log ☕" onPress={handleBrewSave}/>
 
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center'},
+  container: { padding: 20,
+  alignItems: 'center',},
 });
