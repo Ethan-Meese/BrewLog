@@ -17,7 +17,7 @@ export default function Ginders({navigation}: any) {
           {grinders.map((grinder, index) => (
             <View key={index}>
               <Text>Grinder Name: {grinder._grinderName}</Text>
-              <Text>Notes: {grinder._notes}</Text>
+              <Text>Notes: {grinder._notes !== "" ? grinder._notes : "N/A"}</Text>
               <Text></Text>
             </View>
           ))}

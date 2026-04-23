@@ -4,8 +4,8 @@ import { grinders } from './Grinders';
 
 
 export interface Grinder{
-    _grinderName?: string;
-    _notes?: string;
+    _grinderName: string;
+    _notes: string;
 };
 
 export default function AddGrinder({navigation}: any) {  // ✅ default export

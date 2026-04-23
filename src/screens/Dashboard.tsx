@@ -1,4 +1,5 @@
-import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 let welcomeMessege:string[] = ["Welcome", "Goodmorning!", "Another day another coffee!", 
@@ -10,6 +11,13 @@ function getRandomNumber(): number{
 }
 
 export default function Dashboard({navigation}: any) {
+  const [refresh, setRefresh] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(prev => !prev);
+    }, [])
+  );
+  
   return (
     <View style={styles.container}>
       <Text>{welcomeMessege[getRandomNumber()]}</Text>

@@ -16,10 +16,10 @@ export default function Coffees({navigation}: any) {
           {coffees.map((coffee, index) => (
             <View key={index}>
               <Text>Coffee Name: {coffee._coffeeName}</Text>
-              <Text>Coffee Origin: {coffee._coffeeOrigin !== null ? coffee._coffeeOrigin : "No Origin Given"}</Text> 
-              <Text>Coffee Roast: {coffee._coffeeRoast !== null ? coffee._coffeeRoast : "No Roast Given"} </Text>
-              <Text>Coffee Brand: {coffee._coffeeBrand !== null ? coffee._coffeeBrand : "No Brand Given"}</Text>
-              <Text>Notes: {coffee._notes}</Text>
+              <Text>Coffee Origin: {coffee._coffeeOrigin !== "" ? coffee._coffeeOrigin : "N/A"}</Text> 
+              <Text>Coffee Roast: {coffee._coffeeRoast !== "" ? coffee._coffeeRoast : "N/A"} </Text>
+              <Text>Coffee Brand: {coffee._coffeeBrand !== "" ? coffee._coffeeBrand : "N/A"}</Text>
+              <Text>Notes: {coffee._notes !== "" ? coffee._notes : "N/A"}</Text>
               <Text></Text>
             </View>
           ))}

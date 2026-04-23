@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { coffees } from './Coffees';
 
 export interface Coffee{
-    _coffeeName?: string;
-    _coffeeOrigin?: string;
-    _coffeeRoast?: String
-    _coffeeBrand?: string;
-    _notes?: string;
+    _coffeeName: string;
+    _coffeeOrigin: string;
+    _coffeeRoast: String
+    _coffeeBrand: string;
+    _notes: string;
 };
 
 

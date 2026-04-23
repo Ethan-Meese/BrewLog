@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
 import {brewLogs} from './BrewLogs';
@@ -6,14 +6,15 @@ import { grinders } from './Grinders';
 import { Grinder } from './AddGrinder';
 import { coffees } from './Coffees';
 import { Coffee } from './AddCoffee';
+import { useFocusEffect } from '@react-navigation/native';
 export interface Brew {
   _brewMethod: string;
   _coffee: Coffee | null;
   _coffeeDose: string;
   _water: string;
   _ratio: string | null;
-  _waterTemp?: string;
-  _time?: string;
+  _waterTemp: string;
+  _time: string;
   _grinder: Grinder | null;
   _grindSize:string;
   _rating:string;
@@ -58,6 +59,8 @@ export default function AddBrew({navigation}: any) {
   const [grindSize, setGrindSize] = useState("");
   const [rating, setRating] = useState("");
   const [notes, setNotes] = useState("");
+  const [refresh, setRefresh] = useState(false);
+
 
 
   // Making the ratio calculation and converting it to work with the Text tag
@@ -87,6 +90,12 @@ export default function AddBrew({navigation}: any) {
     navigation.goBack();
   };
 
+useFocusEffect(
+  useCallback(() => {
+    setRefresh(prev => !prev);
+  }, [])
+);
+
   //Maybe change how list is done because styling is very limited
   //Maybe change the rating to do number input only
   return (
@@ -107,13 +116,6 @@ export default function AddBrew({navigation}: any) {
           <Picker.Item label="Cold Brew" value="Cold Brew"/>
         </Picker>
 
-        {coffees.length === 0 && (
-          <>  
-          <Text>Please add a coffee!</Text>
-          <Button title="Add Coffee" onPress={() => navigation.navigate("Add Coffee")}/>
-          </>
-        )}
-
         {coffees.length > 0 &&
         <Picker
           selectedValue={coffeeIndex}
@@ -127,6 +129,16 @@ export default function AddBrew({navigation}: any) {
               value={index}/>
           ))}
         </Picker>}
+
+        {coffees.length === 0 ? (
+          <>  
+          <Text>Please add a coffee!</Text>
+          <Button title="Add Coffee" onPress={() => navigation.navigate("Add Coffee")}/>
+          </>
+        ) : (
+          <Button title="Add Coffee" onPress={() => navigation.navigate("Add Coffee")}/>
+        )}
+        
 
       <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee dose...'/>
 
@@ -149,13 +161,6 @@ export default function AddBrew({navigation}: any) {
 
       <BrewInput label='Brew Time' value={time} onChange={setTime} placeholder='Enter brew time...' />
 
-      {grinders.length === 0 && (
-        <>  
-        <Text>Please add a grinder!</Text>
-        <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
-        </>
-      )}
-
       {grinders.length > 0 && 
         <Picker
             selectedValue={grinderIndex}
@@ -168,6 +173,15 @@ export default function AddBrew({navigation}: any) {
                 value={index}/>
             ))}
         </Picker>}
+
+        {grinders.length === 0 ? (
+        <>  
+        <Text>Please add a grinder!</Text>
+        <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
+        </>
+      ) : (
+        <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
+      )}
 
       <BrewInput label='Grind Size' value={grindSize} onChange={setGrindSize} placeholder='Enter grind size...'/>
 
