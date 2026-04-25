@@ -1,28 +1,64 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Coffee } from './AddCoffee';
 
 export let coffees:Coffee[] = [];
 
+
+
 export default function Coffees({navigation}: any) {
+
+  const handleCoffeesUpdate = () =>{
+    
+    coffees = coffeesList;
+    console.log(coffees);
+    navigation.goBack();
+  };
+
+  const [isEditing, setEditing] = useState(false);
+  const [coffeesList, setCoffeesList] = useState<Coffee[]>(coffees);
+
+  const removeCoffee = (index: number) =>{
+    const tempCoffeeArr = [...coffeesList];
+    tempCoffeeArr.splice(index, 1);
+    setCoffeesList(tempCoffeeArr);
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
         <Text>Coffees Screen!</Text>
-        <Text>You have {coffees.length} coffees</Text>
+        <Text>You have {coffeesList.length} coffees</Text>
+        {(coffeesList.length > 0 || isEditing === true)&&(
+          <>
+            <Button title={isEditing ? "Done" : "Edit Coffees"} onPress={() => setEditing(!isEditing)} />
+            <Button title="Check edit state" onPress={() => console.log(isEditing)} />
+          </>
+        )}
+
         <Text></Text>
 
-          {coffees.map((coffee, index) => (
+          {coffeesList.map((coffee, index) => (
             <View key={index}>
               <Text>Coffee Name: {coffee._coffeeName}</Text>
               <Text>Coffee Origin: {coffee._coffeeOrigin !== "" ? coffee._coffeeOrigin : "N/A"}</Text> 
               <Text>Coffee Roast: {coffee._coffeeRoast !== "" ? coffee._coffeeRoast : "N/A"} </Text>
               <Text>Coffee Brand: {coffee._coffeeBrand !== "" ? coffee._coffeeBrand : "N/A"}</Text>
               <Text>Notes: {coffee._notes !== "" ? coffee._notes : "N/A"}</Text>
+              {isEditing && (
+                <>
+                <Button title="Remove Coffee" onPress={ () => removeCoffee(index)}/>
+                </>
+              )}
               <Text></Text>
             </View>
           ))}
+
+          {coffees.length > 0 && (
+            <Button title="Save" onPress={handleCoffeesUpdate}/>
+          )}
+
       </ScrollView>
     </GestureHandlerRootView>
     

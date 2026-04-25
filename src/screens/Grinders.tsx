@@ -12,7 +12,7 @@ export default function Ginders({navigation}: any) {
     grinders = grinderList;
     console.log(grinders);
     navigation.goBack();
-  }
+  };
 
   const [isEditing, setEditing] = useState(false);
   const [grinderList, setGrinderList] = useState<Grinder[]>(grinders);
@@ -50,7 +50,7 @@ export default function Ginders({navigation}: any) {
             </View>
           ))}
 
-          {grinderList.length > 0 && (
+          {grinders.length > 0 && (
             <Button title="Save" onPress={handleGrindersUpdate}/>
           )}
 
