@@ -11,35 +11,34 @@ export default function Coffees({navigation}: any) {
 
   const handleCoffeesUpdate = () =>{
     
-    coffees = coffeesList;
+    coffees = coffeesArr;
     console.log(coffees);
     navigation.goBack();
   };
 
   const [isEditing, setEditing] = useState(false);
-  const [coffeesList, setCoffeesList] = useState<Coffee[]>(coffees);
+  const [coffeesArr, setCoffeesArr] = useState<Coffee[]>(coffees);
 
   const removeCoffee = (index: number) =>{
-    const tempCoffeeArr = [...coffeesList];
+    const tempCoffeeArr = [...coffeesArr];
     tempCoffeeArr.splice(index, 1);
-    setCoffeesList(tempCoffeeArr);
+    setCoffeesArr(tempCoffeeArr);
   };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
         <Text>Coffees Screen!</Text>
-        <Text>You have {coffeesList.length} coffees</Text>
-        {(coffeesList.length > 0 || isEditing === true)&&(
+        <Text>You have {coffeesArr.length} coffees</Text>
+        {(coffeesArr.length > 0 || isEditing === true)&&(
           <>
             <Button title={isEditing ? "Done" : "Edit Coffees"} onPress={() => setEditing(!isEditing)} />
-            <Button title="Check edit state" onPress={() => console.log(isEditing)} />
           </>
         )}
 
         <Text></Text>
 
-          {coffeesList.map((coffee, index) => (
+          {coffeesArr.map((coffee, index) => (
             <View key={index}>
               <Text>Coffee Name: {coffee._coffeeName}</Text>
               <Text>Coffee Origin: {coffee._coffeeOrigin !== "" ? coffee._coffeeOrigin : "N/A"}</Text> 

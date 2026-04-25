@@ -9,35 +9,34 @@ export let grinders:Grinder[] = [];
 export default function Ginders({navigation}: any) {
 
   const handleGrindersUpdate = () =>{
-    grinders = grinderList;
+    grinders = grindersArr;
     console.log(grinders);
     navigation.goBack();
   };
 
   const [isEditing, setEditing] = useState(false);
-  const [grinderList, setGrinderList] = useState<Grinder[]>(grinders);
+  const [grindersArr, setGrinderArr] = useState<Grinder[]>(grinders);
 
   const removeGrinder = (index: number) =>{
-    const tempGrindersArr = [...grinderList];
+    const tempGrindersArr = [...grindersArr];
     tempGrindersArr.splice(index,1);
-    setGrinderList(tempGrindersArr);
+    setGrinderArr(tempGrindersArr);
   };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
         <Text>Grinders Screen!</Text>
-        <Text>You have {grinderList.length} grinders!</Text>
-        {(grinderList.length > 0 || isEditing === true)&&(
+        <Text>You have {grindersArr.length} grinders!</Text>
+        {(grindersArr.length > 0 || isEditing === true)&&(
           <>
             <Button title={isEditing ? "Done" : "Edit Grinders"} onPress={() => setEditing(!isEditing)} />
-            <Button title="Check edit state" onPress={() => console.log(isEditing)} />
           </>
         )}
         
         <Text></Text>
 
-          {grinderList.map((grinder, index) => (
+          {grindersArr.map((grinder, index) => (
             <View key={index}>
               <Text>Grinder Name: {grinder._grinderName}</Text>
               <Text>Notes: {grinder._notes !== "" ? grinder._notes : "N/A"}</Text>
