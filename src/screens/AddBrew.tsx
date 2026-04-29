@@ -114,6 +114,8 @@ useFocusEffect(
           <Picker.Item label="French Press" value="French Press"/>
           <Picker.Item label="Chemex" value="Chemex"/>
           <Picker.Item label="Cold Brew" value="Cold Brew"/>
+          <Picker.Item label="Moka Pot" value="Moka Pot"/>
+          <Picker.Item label="Other" value="Other"/>
         </Picker>
 
         {coffees.length > 0 &&

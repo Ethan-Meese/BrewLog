@@ -63,7 +63,12 @@ export default function AddCoffee({navigation}: any) {  // ✅ default export
         <Text>Notes</Text>
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter notes...' />
 
-        <Button title='Save Coffee ☕' onPress={handleCoffeeSave}/>
+        {coffeeName !== "" ?(
+            <Button title='Save Coffee ☕' onPress={handleCoffeeSave}/>
+        ) : (
+            <Text>Please enter a coffee Name</Text>
+        )}
+        
 
     </View>
   );

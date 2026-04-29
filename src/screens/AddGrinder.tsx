@@ -39,7 +39,11 @@ export default function AddGrinder({navigation}: any) {  // ✅ default export
         <Text>Notes</Text>
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter any notes...' />
 
+        {grinderName !== "" ? (
         <Button title='Save Grinder' onPress={handleGrinderSave}/>
+        ) : (
+            <Text>Please enter a grinder name</Text>
+        )}
 
     </View>
   );
