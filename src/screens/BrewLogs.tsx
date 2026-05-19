@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
 import { Brew } from './AddBrew';
+import { useFocusEffect } from '@react-navigation/native';
 
 export let brewLogs:Brew[] = [];
+export let currentBrewBeingEdited: number;
 
 export default function BrewLogs({navigation}: any) {
 
   const[isEditing, setEditing] = useState(false);
   const[brewLogsArr, setBrewLogsArr] = useState<Brew[]>(brewLogs);
+  const [refresh, setRefresh] = useState(false);
+  
 
   const removeBrewLog = (index: number) =>{
     const tempBrewLogsArr = [...brewLogsArr];
@@ -16,7 +20,8 @@ export default function BrewLogs({navigation}: any) {
   };
 
   const editBrewLog = (index: number) => {
-    console.log("Edit brew button Pressed...You still need to figure out this function")
+    currentBrewBeingEdited = index;
+    navigation.navigate("Edit Brew");
   }
 
   const handleBrewLogsUpdate = () =>{
@@ -25,10 +30,16 @@ export default function BrewLogs({navigation}: any) {
     navigation.goBack();
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(prev => !prev);
+      setEditing(false);
+    }, [])
+  );
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text>Brew Log Screen!</Text>
       <Text>You have {brewLogsArr.length} brew logs!</Text>
       {(brewLogsArr.length > 0 || isEditing === true) && (
         <Button title={isEditing ? "Done" : "Edit BrewLogs"} onPress={() => setEditing(!isEditing)}/>
@@ -44,15 +55,15 @@ export default function BrewLogs({navigation}: any) {
             )}
 
             {brew._coffee?._coffeeOrigin !== "" && (
-            <Text> Coffee Brand: {brew._coffee?._coffeeOrigin}</Text> 
+            <Text> Coffee Origin: {brew._coffee?._coffeeOrigin}</Text> 
             )}
 
             {brew._coffee?._coffeeRoast !== "" && (
-            <Text> Coffee Brand: {brew._coffee?._coffeeRoast}</Text> 
+            <Text> Coffee Roast: {brew._coffee?._coffeeRoast}</Text> 
             )}
 
             {brew._coffee?._notes !== "" && (
-            <Text> Coffee Brand: {brew._coffee?._notes}</Text> 
+            <Text> Coffee Notes: {brew._coffee?._notes}</Text> 
             )}
 
 

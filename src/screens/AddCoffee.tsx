@@ -5,9 +5,10 @@ import { coffees } from './Coffees';
 export interface Coffee{
     _coffeeName: string;
     _coffeeOrigin: string;
-    _coffeeRoast: String
+    _coffeeRoast: string
     _coffeeBrand: string;
     _notes: string;
+    _index: number;
 };
 
 
@@ -19,13 +20,20 @@ export default function AddCoffee({navigation}: any) {  // ✅ default export
     const [coffeeBrand, setCoffeeBrand] = useState("");
     const [notes, setNotes] = useState("");
 
+
     const handleCoffeeSave = () => {
+
+        const newIndex = coffees.length === 0 ? 0 :
+        coffees[coffees.length - 1]._index + 1;
+
+
         var newCoffee = {
         _coffeeName: coffeeName,
         _coffeeOrigin: coffeeOrigin,
         _coffeeRoast: coffeeRoast,
         _coffeeBrand: coffeeBrand,
-        _notes: notes
+        _notes: notes,
+        _index: newIndex
         };
 
         console.log(newCoffee);
@@ -36,9 +44,6 @@ export default function AddCoffee({navigation}: any) {  // ✅ default export
     return (
 
     <View style={styles.container}>
-        <Text>Add Coffee Screen!</Text>
-        
-        <Text></Text>
 
         <Text>Coffee Name</Text>
         <TextInput value={coffeeName} onChangeText={setCoffeeName} placeholder='Enter coffee name...' />

@@ -9,6 +9,7 @@ import AddGrinder from '../screens/AddGrinder';
 import Grinders from '../screens/Grinders';
 import AddCoffee from '../screens/AddCoffee';
 import Coffees from '../screens/Coffees';
+import EditBrew from '../screens/EditBrew';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function AppNavigator(){
                 <Stack.Screen name="Add Coffee" component={AddCoffee}/>
                 <Stack.Screen name="Coffees" component={Coffees}/>
                 <Stack.Screen name="Settings" component={Settings}/>
+                <Stack.Screen name="Edit Brew" component={EditBrew}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

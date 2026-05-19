@@ -26,7 +26,6 @@ export default function Ginders({navigation}: any) {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
-        <Text>Grinders Screen!</Text>
         <Text>You have {grindersArr.length} grinders!</Text>
         {(grindersArr.length > 0 || isEditing === true)&&(
           <>

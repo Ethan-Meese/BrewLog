@@ -1,34 +1,14 @@
 import React, {useCallback, useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
-import {brewLogs} from './BrewLogs';
+import {brewLogs, currentBrewBeingEdited} from './BrewLogs';
 import { grinders } from './Grinders';
 import { Grinder } from './AddGrinder';
 import { coffees } from './Coffees';
 import { Coffee } from './AddCoffee';
+import { Brew, BrewInputProps } from './AddBrew';
 import { useFocusEffect } from '@react-navigation/native';
 
-export interface Brew {
-  _brewMethod: string;
-  _coffee: Coffee | null;
-  _coffeeDose: string;
-  _water: string;
-  _ratio: string | null;
-  _waterTemp: string;
-  _time: string;
-  _grinder: Grinder | null;
-  _grindSize:string;
-  _rating:string;
-  _notes:string;
-};
-
-export type BrewInputProps = {
-  label: string;
-  value: string;
-  onChange: (text: string) => void;
-  placeholder?: string;
-  keyboardType?: "default" | "numeric";
-};
 
 function BrewInput({label, value, onChange, placeholder, keyboardType = "default"}: BrewInputProps){
   return(
@@ -45,21 +25,21 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
 }
 
 
-export default function AddBrew({navigation}: any) {
+export default function EditBrew({navigation}: any) {
 
-  const [brewMethod, setBrewMethod] = useState("Espresso");
-  const [coffeeIndex, setCoffeeIndex] = useState(0);
-  const selectedCoffee = coffees[coffeeIndex] ?? null;
-  const [coffeeDose, setCoffeeDose] = useState("");
-  const [water, setWater] = useState("");
+  const [brewMethod, setBrewMethod] = useState(brewLogs[currentBrewBeingEdited]._brewMethod);
+  const [coffeeIndex, setCoffeeIndex] = useState(brewLogs[currentBrewBeingEdited]._coffee?._index);
+  const selectedCoffee = coffees[coffeeIndex || 0];
+  const [coffeeDose, setCoffeeDose] = useState(brewLogs[currentBrewBeingEdited]._coffeeDose);
+  const [water, setWater] = useState(brewLogs[currentBrewBeingEdited]._water);
   // Ratio is made down below
-  const [waterTemp, setWaterTemp] = useState("");
-  const [time, setTime] = useState("");
-  const [grinderIndex, setGrinderIndex] = useState(0);
-  const selectedGrinder = grinders[grinderIndex] ?? null;
-  const [grindSize, setGrindSize] = useState("");
-  const [rating, setRating] = useState("");
-  const [notes, setNotes] = useState("");
+  const [waterTemp, setWaterTemp] = useState(brewLogs[currentBrewBeingEdited]._waterTemp);
+  const [time, setTime] = useState(brewLogs[currentBrewBeingEdited]._time);
+  const [grinderIndex, setGrinderIndex] = useState(brewLogs[currentBrewBeingEdited]._grinder?._index);
+  const selectedGrinder = grinders[grinderIndex || 0];
+  const [grindSize, setGrindSize] = useState(brewLogs[currentBrewBeingEdited]._grindSize);
+  const [rating, setRating] = useState(brewLogs[currentBrewBeingEdited]._rating);
+  const [notes, setNotes] = useState(brewLogs[currentBrewBeingEdited]._notes);
   const [refresh, setRefresh] = useState(false);
 
 
@@ -71,7 +51,7 @@ export default function AddBrew({navigation}: any) {
   console.log(ratio);
 
 
-  const handleBrewSave = () => {
+  const handleBrewUpdate = () => {
     // store brew locally later
     var newBrew: Brew = {
       _brewMethod: brewMethod, 
@@ -87,20 +67,18 @@ export default function AddBrew({navigation}: any) {
       _notes: notes
     };
     console.log(newBrew);
-    brewLogs.push(newBrew);
+    brewLogs.splice(currentBrewBeingEdited, 1, newBrew);
     navigation.goBack();
   };
 
-useFocusEffect(
-  useCallback(() => {
-    setRefresh(prev => !prev);
-  }, [])
-);
-
-  //Maybe change how list is done because styling is very limited
-  //Maybe change the rating to do number input only
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(prev => !prev);
+    }, [])
+  );
+  
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+<ScrollView contentContainerStyle={styles.container}>
 
       <Text>Brew Method</Text> 
 
@@ -190,12 +168,11 @@ useFocusEffect(
 
       <BrewInput label='Notes' value={notes} onChange={setNotes} placeholder='Enter notes...'/>
 
-
       {(grinders.length !== 0 || coffees.length !== 0) ? (
-        <Button title="Save Brew Log ☕" onPress={handleBrewSave}/>
-      ) : (
-        <Text>Please select a coffee and a grinder</Text>
-      )}
+              <Button title="Save Brew Log ☕" onPress={handleBrewUpdate}/>
+            ) : (
+              <Text>Please select a coffee and a grinder</Text>
+            )}
 
     </ScrollView>
   );

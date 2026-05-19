@@ -6,17 +6,22 @@ import { grinders } from './Grinders';
 export interface Grinder{
     _grinderName: string;
     _notes: string;
+    _index: number;
 };
 
-export default function AddGrinder({navigation}: any) {  // ✅ default export
+export default function AddGrinder({navigation}: any) {
     
     const [grinderName, setGrinderName] = useState("");
     const [notes, setNotes] = useState("");
+    
+    const newIndex = grinders.length === 0 ? 0 :
+            grinders[grinders.length - 1]._index + 1;
   
     const handleGrinderSave = () => {
         var newGrinder = {
         _grinderName: grinderName,
-        _notes: notes
+        _notes: notes,
+        _index: newIndex
         };
 
         console.log(newGrinder);
@@ -27,9 +32,6 @@ export default function AddGrinder({navigation}: any) {  // ✅ default export
     return (
 
     <View style={styles.container}>
-        <Text>Add Grinder Screen!</Text>
-        
-        <Text></Text>
 
         <Text>Grinder Name</Text>
         <TextInput value={grinderName} onChangeText={setGrinderName} placeholder='Enter grinder name...' />

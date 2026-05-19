@@ -28,7 +28,7 @@ export default function Coffees({navigation}: any) {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
-        <Text>Coffees Screen!</Text>
+        
         <Text>You have {coffeesArr.length} coffees</Text>
         {(coffeesArr.length > 0 || isEditing === true)&&(
           <>
