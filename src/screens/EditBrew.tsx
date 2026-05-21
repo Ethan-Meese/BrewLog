@@ -53,7 +53,7 @@ export default function EditBrew({navigation, route}: any) {
 
   const handleBrewUpdate = () => {
     // store brew locally later
-    var updateBrew: Brew = {
+    var updatedBrew: Brew = {
       _brewMethod: brewMethod, 
       _coffee: selectedCoffee,
       _coffeeDose: coffeeDose,
@@ -66,7 +66,7 @@ export default function EditBrew({navigation, route}: any) {
       _rating: rating, 
       _notes: notes
     };
-    console.log(updateBrew);
+    console.log(updatedBrew);
     // add this
     const brewIndex = brewLogsArr.findIndex(
       (brew: Brew) => brew === brewToEdit
@@ -74,7 +74,7 @@ export default function EditBrew({navigation, route}: any) {
 
     if (brewIndex !== -1) {
       const updatedBrews = [...brewLogsArr];
-      updatedBrews.splice(brewIndex, 1, updateBrew);
+      updatedBrews.splice(brewIndex, 1, updatedBrew);
 
       setBrewLogsArr(updatedBrews);
     }

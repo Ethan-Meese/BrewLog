@@ -1,25 +1,45 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { grinders } from './Grinders';
+import { Grinder } from './AddGrinder';
+import { brewLogs } from './BrewLogs';
 
 
 export default function EditGrinder({navigation, route}: any) {
-    const {currentGrinderBeingEdited} = route.params;
-    const [grinderName, setGrinderName] = useState(grinders[currentGrinderBeingEdited]._grinderName);
-    const [notes, setNotes] = useState(grinders[currentGrinderBeingEdited]._notes);
+    const {grinderToEdit, grindersArr, setGrinderArr} = route.params;
+    const [grinderName, setGrinderName] = useState(grinderToEdit._grinderName);
+    const [notes, setNotes] = useState(grinderToEdit._notes);
     
     // Keeps the same index
-    const newIndex = grinders[currentGrinderBeingEdited]._index;
+    const newIndex = grinderToEdit._index;
   
     const handleGrinderUpdate = () => {
-        var updateGrinder = {
+        var updatedGrinder = {
         _grinderName: grinderName,
         _notes: notes,
         _index: newIndex
         };
 
-        console.log(updateGrinder);
-        grinders.splice(currentGrinderBeingEdited, 1, updateGrinder);
+        // updates the coffee in the brew log
+        brewLogs.forEach(element => {
+            if (element._grinder?._index === newIndex){
+                element._grinder = updatedGrinder;
+                console.log("Updated")
+            }
+        });
+
+        console.log(updatedGrinder);
+
+        const grinderIndex = grindersArr.findIndex(
+              (grinder: Grinder) => grinder === grinderToEdit
+            );
+        
+            if (grinderIndex !== -1) {
+              const updatedBrews = [...grindersArr];
+              updatedBrews.splice(grinderIndex, 1, updatedGrinder);
+        
+              setGrinderArr(updatedBrews);
+            }
         navigation.goBack();
     };
   

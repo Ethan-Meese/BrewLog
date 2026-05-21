@@ -24,8 +24,8 @@ export default function Ginders({navigation, route}: any) {
     setGrinderArr(tempGrindersArr);
   };
 
-  const editGrinder = (index: number) =>{
-    navigation.navigate("Edit Grinder", {currentGrinderBeingEdited: index});
+  const editGrinder = (grinder: Grinder) =>{
+    navigation.navigate("Edit Grinder", {grinderToEdit: grinder, grindersArr, setGrinderArr});
   }
 
   useFocusEffect(
@@ -55,7 +55,7 @@ export default function Ginders({navigation, route}: any) {
               {isEditing && (
                 <>
                   <Button title="Remove Grinder" onPress={ () => removeGrinder(index)}/>
-                  <Button title="Edit Grinder" onPress={ () => editGrinder(index)}/>
+                  <Button title="Edit Grinder" onPress={ () => editGrinder(grinder)}/>
                 </>
               )}
               <Text></Text>

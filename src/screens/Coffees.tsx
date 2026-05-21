@@ -27,8 +27,8 @@ export default function Coffees({navigation, route}: any) {
     setCoffeesArr(tempCoffeeArr);
   };
 
-  const editCoffee = (index: number) =>{
-    navigation.navigate("Edit Coffee", {currentCoffeeBeingEdited: index});
+  const editCoffee = (coffee: Coffee) =>{
+    navigation.navigate("Edit Coffee", {coffeeToEdit: coffee, coffeesArr, setCoffeesArr});
   }
 
   useFocusEffect(
@@ -61,7 +61,7 @@ export default function Coffees({navigation, route}: any) {
               {isEditing && (
                 <>
                   <Button title="Remove Coffee" onPress={ () => removeCoffee(index)}/>
-                  <Button title="Edit Coffee" onPress={ () => editCoffee(index)}/>
+                  <Button title="Edit Coffee" onPress={ () => editCoffee(coffee)}/>
                 </>
               )}
               <Text></Text>

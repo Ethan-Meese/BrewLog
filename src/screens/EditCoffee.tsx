@@ -2,17 +2,18 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { coffees } from './Coffees';
 import {brewLogs} from './BrewLogs';
+import { Coffee } from './AddCoffee';
 
 export default function AddCoffee({navigation, route}: any) {
-    const {currentCoffeeBeingEdited} = route.params
-    const [coffeeName, setCoffeeName] = useState(coffees[currentCoffeeBeingEdited]._coffeeName);
-    const [coffeeOrigin, setCoffeeOrigin] = useState(coffees[currentCoffeeBeingEdited]._coffeeOrigin);
-    const [coffeeRoast, setCoffeeRoast] = useState(coffees[currentCoffeeBeingEdited]._coffeeRoast);
-    const [coffeeBrand, setCoffeeBrand] = useState(coffees[currentCoffeeBeingEdited]._coffeeBrand);
-    const [notes, setNotes] = useState(coffees[currentCoffeeBeingEdited]._notes);
+    const {coffeeToEdit, coffeesArr, setCoffeesArr} = route.params
+    const [coffeeName, setCoffeeName] = useState(coffeeToEdit._coffeeName);
+    const [coffeeOrigin, setCoffeeOrigin] = useState(coffeeToEdit._coffeeOrigin);
+    const [coffeeRoast, setCoffeeRoast] = useState(coffeeToEdit._coffeeRoast);
+    const [coffeeBrand, setCoffeeBrand] = useState(coffeeToEdit._coffeeBrand);
+    const [notes, setNotes] = useState(coffeeToEdit._notes);
 
     // Keeps current Index
-    const newIndex = coffees[currentCoffeeBeingEdited]._index;
+    const newIndex = coffeeToEdit._index;
 
     const handleCoffeeUpdate = () => {
 
@@ -34,7 +35,18 @@ export default function AddCoffee({navigation, route}: any) {
         });
 
         console.log(updatedCoffee);
-        coffees.splice(currentCoffeeBeingEdited,1 ,updatedCoffee);
+
+        const brewIndex = coffeesArr.findIndex(
+              (coffee: Coffee) => coffee === coffeeToEdit
+            );
+        
+            if (brewIndex !== -1) {
+              const updatedBrews = [...coffeesArr];
+              updatedBrews.splice(brewIndex, 1, updatedCoffee);
+        
+              setCoffeesArr(updatedBrews);
+            }
+            
         navigation.goBack();
     };
 
