@@ -1,30 +1,22 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { coffees } from './Coffees';
+import {brewLogs} from './BrewLogs';
 
-export interface Coffee{
-    _coffeeName: string;
-    _coffeeOrigin: string;
-    _coffeeRoast: string
-    _coffeeBrand: string;
-    _notes: string;
-    _index: number;
-};
+export default function AddCoffee({navigation, route}: any) {
+    const {currentCoffeeBeingEdited} = route.params
+    const [coffeeName, setCoffeeName] = useState(coffees[currentCoffeeBeingEdited]._coffeeName);
+    const [coffeeOrigin, setCoffeeOrigin] = useState(coffees[currentCoffeeBeingEdited]._coffeeOrigin);
+    const [coffeeRoast, setCoffeeRoast] = useState(coffees[currentCoffeeBeingEdited]._coffeeRoast);
+    const [coffeeBrand, setCoffeeBrand] = useState(coffees[currentCoffeeBeingEdited]._coffeeBrand);
+    const [notes, setNotes] = useState(coffees[currentCoffeeBeingEdited]._notes);
 
+    // Keeps current Index
+    const newIndex = coffees[currentCoffeeBeingEdited]._index;
 
-export default function AddCoffee({navigation}: any) {
-  
-    const [coffeeName, setCoffeeName] = useState("");
-    const [coffeeOrigin, setCoffeeOrigin] = useState("");
-    const [coffeeRoast, setCoffeeRoast] = useState("");
-    const [coffeeBrand, setCoffeeBrand] = useState("");
-    const [notes, setNotes] = useState("");
-    const newIndex = coffees.length === 0 ? 0 :
-        coffees[coffees.length - 1]._index + 1;
+    const handleCoffeeUpdate = () => {
 
-    const handleCoffeeSave = () => {
-
-        var newCoffee = {
+        var updatedCoffee = {
         _coffeeName: coffeeName,
         _coffeeOrigin: coffeeOrigin,
         _coffeeRoast: coffeeRoast,
@@ -33,8 +25,16 @@ export default function AddCoffee({navigation}: any) {
         _index: newIndex
         };
 
-        console.log(newCoffee);
-        coffees.push(newCoffee);
+        // updates the coffee in the brew log
+        brewLogs.forEach(element => {
+            if (element._coffee?._index === newIndex){
+                element._coffee = updatedCoffee;
+                console.log("Updated")
+            }
+        });
+
+        console.log(updatedCoffee);
+        coffees.splice(currentCoffeeBeingEdited,1 ,updatedCoffee);
         navigation.goBack();
     };
 
@@ -66,11 +66,11 @@ export default function AddCoffee({navigation}: any) {
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter notes...' />
 
         {coffeeName !== "" ?(
-            <Button title='Save Coffee ☕' onPress={handleCoffeeSave}/>
+            <Button title='Save Coffee ☕' onPress={handleCoffeeUpdate}/>
         ) : (
             <Text>Please enter a coffee Name</Text>
         )}
-        
+
     </View>
   );
 }

@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
-import {brewLogs, currentBrewBeingEdited} from './BrewLogs';
+import {brewLogs} from './BrewLogs';
 import { grinders } from './Grinders';
 import { Grinder } from './AddGrinder';
 import { coffees } from './Coffees';
@@ -25,21 +25,23 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
 }
 
 
-export default function EditBrew({navigation}: any) {
+export default function EditBrew({navigation, route}: any) {
+  // add this
+  const {brewToEdit, brewLogsArr, setBrewLogsArr} = route.params;
 
-  const [brewMethod, setBrewMethod] = useState(brewLogs[currentBrewBeingEdited]._brewMethod);
-  const [coffeeIndex, setCoffeeIndex] = useState(brewLogs[currentBrewBeingEdited]._coffee?._index);
-  const selectedCoffee = coffees[coffeeIndex || 0];
-  const [coffeeDose, setCoffeeDose] = useState(brewLogs[currentBrewBeingEdited]._coffeeDose);
-  const [water, setWater] = useState(brewLogs[currentBrewBeingEdited]._water);
+  const [brewMethod, setBrewMethod] = useState(brewToEdit._brewMethod);
+  const [coffeeIndex, setCoffeeIndex] = useState(brewToEdit._coffee?._index);
+  const selectedCoffee = coffees[coffeeIndex ?? 0];
+  const [coffeeDose, setCoffeeDose] = useState(brewToEdit._coffeeDose);
+  const [water, setWater] = useState(brewToEdit._water);
   // Ratio is made down below
-  const [waterTemp, setWaterTemp] = useState(brewLogs[currentBrewBeingEdited]._waterTemp);
-  const [time, setTime] = useState(brewLogs[currentBrewBeingEdited]._time);
-  const [grinderIndex, setGrinderIndex] = useState(brewLogs[currentBrewBeingEdited]._grinder?._index);
-  const selectedGrinder = grinders[grinderIndex || 0];
-  const [grindSize, setGrindSize] = useState(brewLogs[currentBrewBeingEdited]._grindSize);
-  const [rating, setRating] = useState(brewLogs[currentBrewBeingEdited]._rating);
-  const [notes, setNotes] = useState(brewLogs[currentBrewBeingEdited]._notes);
+  const [waterTemp, setWaterTemp] = useState(brewToEdit._waterTemp);
+  const [time, setTime] = useState(brewToEdit._time);
+  const [grinderIndex, setGrinderIndex] = useState(brewToEdit._grinder?._index);
+  const selectedGrinder = grinders[grinderIndex ?? 0];
+  const [grindSize, setGrindSize] = useState(brewToEdit._grindSize);
+  const [rating, setRating] = useState(brewToEdit._rating);
+  const [notes, setNotes] = useState(brewToEdit._notes);
   const [refresh, setRefresh] = useState(false);
 
 
@@ -48,12 +50,10 @@ export default function EditBrew({navigation}: any) {
   const doseNumber: number = parseFloat(coffeeDose);
   const waterNumber: number = parseFloat(water);
   const ratio: string | null = !isNaN(doseNumber) && doseNumber > 0 && !isNaN(waterNumber) ? (waterNumber / doseNumber).toFixed(1) : null;
-  console.log(ratio);
-
 
   const handleBrewUpdate = () => {
     // store brew locally later
-    var newBrew: Brew = {
+    var updateBrew: Brew = {
       _brewMethod: brewMethod, 
       _coffee: selectedCoffee,
       _coffeeDose: coffeeDose,
@@ -66,8 +66,19 @@ export default function EditBrew({navigation}: any) {
       _rating: rating, 
       _notes: notes
     };
-    console.log(newBrew);
-    brewLogs.splice(currentBrewBeingEdited, 1, newBrew);
+    console.log(updateBrew);
+    // add this
+    const brewIndex = brewLogsArr.findIndex(
+      (brew: Brew) => brew === brewToEdit
+    );
+
+    if (brewIndex !== -1) {
+      const updatedBrews = [...brewLogsArr];
+      updatedBrews.splice(brewIndex, 1, updateBrew);
+
+      setBrewLogsArr(updatedBrews);
+    }
+    
     navigation.goBack();
   };
 

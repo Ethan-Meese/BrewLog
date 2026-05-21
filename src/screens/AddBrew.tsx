@@ -49,6 +49,7 @@ export default function AddBrew({navigation}: any) {
 
   const [brewMethod, setBrewMethod] = useState("Espresso");
   const [coffeeIndex, setCoffeeIndex] = useState(0);
+  //selected coffee sets the coffee by getting the index from coffeeIndex
   const selectedCoffee = coffees[coffeeIndex] ?? null;
   const [coffeeDose, setCoffeeDose] = useState("");
   const [water, setWater] = useState("");
@@ -68,8 +69,6 @@ export default function AddBrew({navigation}: any) {
   const doseNumber: number = parseFloat(coffeeDose);
   const waterNumber: number = parseFloat(water);
   const ratio: string | null = !isNaN(doseNumber) && doseNumber > 0 && !isNaN(waterNumber) ? (waterNumber / doseNumber).toFixed(1) : null;
-  console.log(ratio);
-
 
   const handleBrewSave = () => {
     // store brew locally later

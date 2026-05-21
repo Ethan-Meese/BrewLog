@@ -3,29 +3,23 @@ import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { grinders } from './Grinders';
 
 
-export interface Grinder{
-    _grinderName: string;
-    _notes: string;
-    _index: number;
-};
-
-export default function AddGrinder({navigation}: any) {
+export default function EditGrinder({navigation, route}: any) {
+    const {currentGrinderBeingEdited} = route.params;
+    const [grinderName, setGrinderName] = useState(grinders[currentGrinderBeingEdited]._grinderName);
+    const [notes, setNotes] = useState(grinders[currentGrinderBeingEdited]._notes);
     
-    const [grinderName, setGrinderName] = useState("");
-    const [notes, setNotes] = useState("");
-    
-    const newIndex = grinders.length === 0 ? 0 :
-            grinders[grinders.length - 1]._index + 1;
+    // Keeps the same index
+    const newIndex = grinders[currentGrinderBeingEdited]._index;
   
-    const handleGrinderSave = () => {
-        var newGrinder = {
+    const handleGrinderUpdate = () => {
+        var updateGrinder = {
         _grinderName: grinderName,
         _notes: notes,
         _index: newIndex
         };
 
-        console.log(newGrinder);
-        grinders.push(newGrinder);
+        console.log(updateGrinder);
+        grinders.splice(currentGrinderBeingEdited, 1, updateGrinder);
         navigation.goBack();
     };
   
@@ -41,7 +35,7 @@ export default function AddGrinder({navigation}: any) {
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter any notes...' />
 
         {grinderName !== "" ? (
-        <Button title='Save Grinder' onPress={handleGrinderSave}/>
+        <Button title='Save Grinder' onPress={handleGrinderUpdate}/>
         ) : (
             <Text>Please enter a grinder name</Text>
         )}

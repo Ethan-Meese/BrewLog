@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Grinder } from './AddGrinder';
+import { useFocusEffect } from '@react-navigation/native';
 
 export let grinders:Grinder[] = [];
 
+export default function Ginders({navigation, route}: any) {
 
-export default function Ginders({navigation}: any) {
+  const [isEditing, setEditing] = useState(false);
+  const [grindersArr, setGrinderArr] = useState<Grinder[]>(grinders);
+  const [refresh, setRefresh] = useState(false);
 
   const handleGrindersUpdate = () =>{
     grinders = grindersArr;
@@ -14,14 +18,23 @@ export default function Ginders({navigation}: any) {
     navigation.goBack();
   };
 
-  const [isEditing, setEditing] = useState(false);
-  const [grindersArr, setGrinderArr] = useState<Grinder[]>(grinders);
-
   const removeGrinder = (index: number) =>{
     const tempGrindersArr = [...grindersArr];
     tempGrindersArr.splice(index,1);
     setGrinderArr(tempGrindersArr);
   };
+
+  const editGrinder = (index: number) =>{
+    navigation.navigate("Edit Grinder", {currentGrinderBeingEdited: index});
+  }
+
+  useFocusEffect(
+      useCallback(() => {
+        setRefresh(prev => !prev);
+        setEditing(false);
+      }, [])
+    );
+  
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -41,7 +54,8 @@ export default function Ginders({navigation}: any) {
               <Text>Notes: {grinder._notes !== "" ? grinder._notes : "N/A"}</Text>
               {isEditing && (
                 <>
-                <Button title="Remove Grinder" onPress={ () => removeGrinder(index)}/>
+                  <Button title="Remove Grinder" onPress={ () => removeGrinder(index)}/>
+                  <Button title="Edit Grinder" onPress={ () => editGrinder(index)}/>
                 </>
               )}
               <Text></Text>

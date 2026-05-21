@@ -4,14 +4,13 @@ import { Brew } from './AddBrew';
 import { useFocusEffect } from '@react-navigation/native';
 
 export let brewLogs:Brew[] = [];
-export let currentBrewBeingEdited: number;
 
-export default function BrewLogs({navigation}: any) {
+export default function BrewLogs({navigation, route}: any) {
 
   const[isEditing, setEditing] = useState(false);
   const[brewLogsArr, setBrewLogsArr] = useState<Brew[]>(brewLogs);
   const [refresh, setRefresh] = useState(false);
-  
+
 
   const removeBrewLog = (index: number) =>{
     const tempBrewLogsArr = [...brewLogsArr];
@@ -19,9 +18,9 @@ export default function BrewLogs({navigation}: any) {
     setBrewLogsArr(tempBrewLogsArr);
   };
 
-  const editBrewLog = (index: number) => {
-    currentBrewBeingEdited = index;
-    navigation.navigate("Edit Brew");
+  //Edited this
+  const editBrewLog = (brew: Brew) => {
+    navigation.navigate("Edit Brew", {brewToEdit: brew, brewLogsArr, setBrewLogsArr});
   }
 
   const handleBrewLogsUpdate = () =>{
@@ -37,7 +36,7 @@ export default function BrewLogs({navigation}: any) {
     }, [])
   );
 
-
+// changed index to brew
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text>You have {brewLogsArr.length} brew logs!</Text>
@@ -105,7 +104,7 @@ export default function BrewLogs({navigation}: any) {
             {isEditing === true &&(
               <>
                 <Button title="Remove BrewLog" onPress={() => removeBrewLog(index)}/>
-                <Button title="Edit BrewLog" onPress={() => editBrewLog(index)}/>
+                <Button title="Edit BrewLog" onPress={() => editBrewLog(brew)}/>
               </>
             )}
 

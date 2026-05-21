@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Coffee } from './AddCoffee';
+import { useFocusEffect } from '@react-navigation/native';
 
 export let coffees:Coffee[] = [];
 
 
+export default function Coffees({navigation, route}: any) {
 
-export default function Coffees({navigation}: any) {
+  const [isEditing, setEditing] = useState(false);
+  const [coffeesArr, setCoffeesArr] = useState<Coffee[]>(coffees);
+  const [refresh, setRefresh] = useState(false);
 
+  
   const handleCoffeesUpdate = () =>{
     
     coffees = coffeesArr;
@@ -16,14 +21,22 @@ export default function Coffees({navigation}: any) {
     navigation.goBack();
   };
 
-  const [isEditing, setEditing] = useState(false);
-  const [coffeesArr, setCoffeesArr] = useState<Coffee[]>(coffees);
-
   const removeCoffee = (index: number) =>{
     const tempCoffeeArr = [...coffeesArr];
     tempCoffeeArr.splice(index, 1);
     setCoffeesArr(tempCoffeeArr);
   };
+
+  const editCoffee = (index: number) =>{
+    navigation.navigate("Edit Coffee", {currentCoffeeBeingEdited: index});
+  }
+
+  useFocusEffect(
+      useCallback(() => {
+        setRefresh(prev => !prev);
+        setEditing(false);
+      }, [])
+    );
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -47,7 +60,8 @@ export default function Coffees({navigation}: any) {
               <Text>Notes: {coffee._notes !== "" ? coffee._notes : "N/A"}</Text>
               {isEditing && (
                 <>
-                <Button title="Remove Coffee" onPress={ () => removeCoffee(index)}/>
+                  <Button title="Remove Coffee" onPress={ () => removeCoffee(index)}/>
+                  <Button title="Edit Coffee" onPress={ () => editCoffee(index)}/>
                 </>
               )}
               <Text></Text>
