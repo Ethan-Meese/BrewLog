@@ -4,7 +4,6 @@ import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler
 import { Grinder } from './AddGrinder';
 import { useFocusEffect } from '@react-navigation/native';
 import { brewLogs } from './BrewLogs';
-import { coffees } from './Coffees';
 
 export let grinders:Grinder[] = [];
 
