@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
-import { grinders } from './Grinders';
 import { Grinder } from './AddGrinder';
-import { brewLogs } from './BrewLogs';
 
 
 export default function EditGrinder({navigation, route}: any) {
@@ -13,20 +11,12 @@ export default function EditGrinder({navigation, route}: any) {
     // Keeps the same index
     const newIndex = grinderToEdit._index;
   
-    const handleGrinderUpdate = () => {
+    const handleGrinderEdit = () => {
         var updatedGrinder = {
         _grinderName: grinderName,
         _notes: notes,
         _index: newIndex
         };
-
-        // updates the coffee in the brew log
-        brewLogs.forEach(element => {
-            if (element._grinder?._index === newIndex){
-                element._grinder = updatedGrinder;
-                console.log("Updated")
-            }
-        });
 
         console.log(updatedGrinder);
 
@@ -55,7 +45,7 @@ export default function EditGrinder({navigation, route}: any) {
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter any notes...' />
 
         {grinderName !== "" ? (
-        <Button title='Save Grinder' onPress={handleGrinderUpdate}/>
+        <Button title='Save Grinder' onPress={handleGrinderEdit}/>
         ) : (
             <Text>Please enter a grinder name</Text>
         )}

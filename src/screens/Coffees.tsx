@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Coffee } from './AddCoffee';
 import { useFocusEffect } from '@react-navigation/native';
+import { brewLogs } from './BrewLogs';
 
 export let coffees:Coffee[] = [];
 
@@ -17,6 +18,20 @@ export default function Coffees({navigation, route}: any) {
   const handleCoffeesUpdate = () =>{
     
     coffees = coffeesArr;
+
+    // updates the coffees in the brewlog screen. Basically syncs it
+    brewLogs.forEach(brew => {
+
+      const updatedCoffee = coffees.find(
+        coffee => coffee._index === brew._coffee?._index
+      );
+
+      if (updatedCoffee){
+        brew._coffee = updatedCoffee;
+      }
+      
+    });
+
     console.log(coffees);
     navigation.goBack();
   };

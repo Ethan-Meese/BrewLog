@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
-import { coffees } from './Coffees';
-import {brewLogs} from './BrewLogs';
 import { Coffee } from './AddCoffee';
 
 export default function AddCoffee({navigation, route}: any) {
@@ -15,7 +13,7 @@ export default function AddCoffee({navigation, route}: any) {
     // Keeps current Index
     const newIndex = coffeeToEdit._index;
 
-    const handleCoffeeUpdate = () => {
+    const handleCoffeeEdit = () => {
 
         var updatedCoffee = {
         _coffeeName: coffeeName,
@@ -26,23 +24,16 @@ export default function AddCoffee({navigation, route}: any) {
         _index: newIndex
         };
 
-        // updates the coffee in the brew log
-        brewLogs.forEach(element => {
-            if (element._coffee?._index === newIndex){
-                element._coffee = updatedCoffee;
-                console.log("Updated")
-            }
-        });
 
         console.log(updatedCoffee);
 
-        const brewIndex = coffeesArr.findIndex(
+        const coffeeIndex = coffeesArr.findIndex(
               (coffee: Coffee) => coffee === coffeeToEdit
             );
         
-            if (brewIndex !== -1) {
+            if (coffeeIndex !== -1) {
               const updatedBrews = [...coffeesArr];
-              updatedBrews.splice(brewIndex, 1, updatedCoffee);
+              updatedBrews.splice(coffeeIndex, 1, updatedCoffee);
         
               setCoffeesArr(updatedBrews);
             }
@@ -78,7 +69,7 @@ export default function AddCoffee({navigation, route}: any) {
         <TextInput value={notes} onChangeText={setNotes} placeholder='Enter notes...' />
 
         {coffeeName !== "" ?(
-            <Button title='Save Coffee ☕' onPress={handleCoffeeUpdate}/>
+            <Button title='Save Coffee ☕' onPress={handleCoffeeEdit}/>
         ) : (
             <Text>Please enter a coffee Name</Text>
         )}

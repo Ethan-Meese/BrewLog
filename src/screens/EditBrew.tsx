@@ -1,11 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // dropdown
-import {brewLogs} from './BrewLogs';
 import { grinders } from './Grinders';
-import { Grinder } from './AddGrinder';
 import { coffees } from './Coffees';
-import { Coffee } from './AddCoffee';
 import { Brew, BrewInputProps } from './AddBrew';
 import { useFocusEffect } from '@react-navigation/native';
 

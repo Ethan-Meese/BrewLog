@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Grinder } from './AddGrinder';
 import { useFocusEffect } from '@react-navigation/native';
+import { brewLogs } from './BrewLogs';
+import { coffees } from './Coffees';
 
 export let grinders:Grinder[] = [];
 
@@ -14,6 +16,20 @@ export default function Ginders({navigation, route}: any) {
 
   const handleGrindersUpdate = () =>{
     grinders = grindersArr;
+
+    // updates the grinders in the brewlog screen. Basically syncs it
+    brewLogs.forEach(brew => {
+      
+      const updatedGrinder = grinders.find(
+        grinder => grinder._index === brew._grinder?._index
+      );
+
+      if (updatedGrinder){
+        brew._grinder = updatedGrinder;
+      }
+
+    });
+
     console.log(grinders);
     navigation.goBack();
   };
