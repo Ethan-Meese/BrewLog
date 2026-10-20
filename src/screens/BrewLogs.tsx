@@ -9,6 +9,7 @@ export default function BrewLogs({navigation, route}: any) {
 
   const[isEditing, setEditing] = useState(false);
   const[brewLogsArr, setBrewLogsArr] = useState<Brew[]>(brewLogs);
+  const[selectedBrewMethod, setSelectedBrewMethod] = useState("");
   const [refresh, setRefresh] = useState(false);
 
 
@@ -36,7 +37,9 @@ export default function BrewLogs({navigation, route}: any) {
     }, [])
   );
 
-// changed index to brew
+// changed index to 
+// The added code below should now display a button for each brew method. once clicked it will set the selectedBrewMethod to that brew. 
+// Then below that, those brews should display instead of every brew. Editing should not be effected.
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text>You have {brewLogsArr.length} brew logs!</Text>
@@ -44,8 +47,15 @@ export default function BrewLogs({navigation, route}: any) {
         <Button title={isEditing ? "Done" : "Edit BrewLogs"} onPress={() => setEditing(!isEditing)}/>
       )}
 
+        {brewLogsArr.map((brew,index) =>(
+          <View key={index}>
+            <Button title={brew._brewMethod} onPress={() => setSelectedBrewMethod(brew._brewMethod)}/>
+          </View>
+        ))}
+
         {brewLogsArr.map((brew, index) => (
           <View key={index}>
+
             <Text>Brew Method: {brew._brewMethod}</Text>
             <Text>Coffee Name: {brew._coffee?._coffeeName}</Text>
 
@@ -107,7 +117,7 @@ export default function BrewLogs({navigation, route}: any) {
                 <Button title="Edit BrewLog" onPress={() => editBrewLog(brew)}/>
               </>
             )}
-
+            
             <Text></Text>
 
           </View>
