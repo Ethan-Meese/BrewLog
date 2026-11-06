@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, Button, TextInput} from 'react-native';
 import { coffees } from './Coffees';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface Coffee{
     _coffeeName: string;
     _coffeeOrigin: string;
@@ -22,20 +22,29 @@ export default function AddCoffee({navigation}: any) {
     const newIndex = coffees.length === 0 ? 0 :
         coffees[coffees.length - 1]._index + 1;
 
-    const handleCoffeeSave = () => {
+        // async method to save coffees
+    const handleCoffeeSave = async () => {
+        try{
+            var newCoffee = {
+            _coffeeName: coffeeName,
+            _coffeeOrigin: coffeeOrigin,
+            _coffeeRoast: coffeeRoast,
+            _coffeeBrand: coffeeBrand,
+            _notes: notes,
+            _index: newIndex
+            };
 
-        var newCoffee = {
-        _coffeeName: coffeeName,
-        _coffeeOrigin: coffeeOrigin,
-        _coffeeRoast: coffeeRoast,
-        _coffeeBrand: coffeeBrand,
-        _notes: notes,
-        _index: newIndex
-        };
+            console.log(newCoffee);
+            coffees.push(newCoffee);
 
-        console.log(newCoffee);
-        coffees.push(newCoffee);
-        navigation.goBack();
+            const jsonValue = JSON.stringify(coffees);
+            await AsyncStorage.setItem('coffees', jsonValue);
+            console.log("Coffee added to Storage.");
+            navigation.goBack();
+        }
+        catch(e){
+            console.error(e);
+        }
     };
 
     return (
