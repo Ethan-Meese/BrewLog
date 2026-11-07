@@ -4,6 +4,7 @@ import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler
 import { Grinder } from './AddGrinder';
 import { useFocusEffect } from '@react-navigation/native';
 import { brewLogs } from './BrewLogs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export let grinders:Grinder[] = [];
 
@@ -13,31 +14,45 @@ export default function Ginders({navigation, route}: any) {
   const [grindersArr, setGrinderArr] = useState<Grinder[]>(grinders);
   const [refresh, setRefresh] = useState(false);
 
-  const handleGrindersUpdate = () =>{
-    grinders = grindersArr;
+  const handleGrindersUpdate = async() =>{
+    try{
+      grinders = grindersArr;
 
-    // updates the grinders in the brewlog screen. Basically syncs it
-    brewLogs.forEach(brew => {
-      
-      const updatedGrinder = grinders.find(
-        grinder => grinder._index === brew._grinder?._index
-      );
+      // updates the grinders in the brewlog screen. Basically syncs it
+      brewLogs.forEach(brew => {
+        
+        const updatedGrinder = grinders.find(
+          grinder => grinder._index === brew._grinder?._index
+        );
 
-      if (updatedGrinder){
-        brew._grinder = updatedGrinder;
-      }
+        if (updatedGrinder){
+          brew._grinder = updatedGrinder;
+        }
+      });
 
-    });
+      console.log(grinders);
 
-    console.log(grinders);
-    navigation.goBack();
+      const jsonValue = JSON.stringify(grinders);
+      await AsyncStorage.setItem('grinders', jsonValue);
+      console.log("Grinder added to Storage.");
+      navigation.goBack();
+    }
+    catch(e){
+      console.error(e);
+    }
   };
 
+  /* Keep for now
   const removeGrinder = (index: number) =>{
     const tempGrindersArr = [...grindersArr];
     tempGrindersArr.splice(index,1);
     setGrinderArr(tempGrindersArr);
   };
+*/
+
+  const removeGrinder = (grinderToRemove: Grinder) => {
+    setGrinderArr((currentGrinders) => currentGrinders.filter((grinder) => grinder !== grinderToRemove))
+  }
 
   const editGrinder = (grinder: Grinder) =>{
     navigation.navigate("Edit Grinder", {grinderToEdit: grinder, grindersArr, setGrinderArr});
@@ -69,7 +84,7 @@ export default function Ginders({navigation, route}: any) {
               <Text>Notes: {grinder._notes !== "" ? grinder._notes : "N/A"}</Text>
               {isEditing && (
                 <>
-                  <Button title="Remove Grinder" onPress={ () => removeGrinder(index)}/>
+                  <Button title="Remove Grinder" onPress={ () => removeGrinder(grinder)}/>
                   <Button title="Edit Grinder" onPress={ () => editGrinder(grinder)}/>
                 </>
               )}

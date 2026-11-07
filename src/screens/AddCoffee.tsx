@@ -22,7 +22,6 @@ export default function AddCoffee({navigation}: any) {
     const newIndex = coffees.length === 0 ? 0 :
         coffees[coffees.length - 1]._index + 1;
 
-        // async method to save coffees
     const handleCoffeeSave = async () => {
         try{
             var newCoffee = {

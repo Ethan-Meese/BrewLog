@@ -3,6 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { coffees } from './Coffees';
+import { grinders } from './Grinders';
+import { brewLogs } from './BrewLogs';
+
+
 let welcomeMessege:string[] = ["Welcome", "Goodmorning!", "Another day another coffee!", 
                               "What are we feeling today?", "It's coffee time!", "I hope you're doing well!", 
                               "Todays a good day!", "Lets be honest...Nothing beats coffee"];
@@ -18,6 +22,8 @@ export default function Dashboard({navigation}: any) {
     const getAllCoffeeData = async () => {
     try{
       const coffeeJsonValue = await AsyncStorage.getItem('coffees');
+      const grinderJsonValue = await AsyncStorage.getItem('grinders');
+      const brewLogsJsonValue = await AsyncStorage.getItem('brewLogs');
 
       if (coffeeJsonValue !== null){
         const parsedCoffees = JSON.parse(coffeeJsonValue);
@@ -25,6 +31,24 @@ export default function Dashboard({navigation}: any) {
         if (parsedCoffees.length > 0){
           coffees.push(...parsedCoffees);
           console.log("Success!", parsedCoffees, coffees);
+        } 
+      }
+
+      if (grinderJsonValue !== null){
+        const parsedGrinders = JSON.parse(grinderJsonValue);
+
+        if (parsedGrinders.length > 0){
+          grinders.push(...parsedGrinders);
+          console.log("Success!", parsedGrinders, grinders);
+        } 
+      }
+
+      if (brewLogsJsonValue !== null){
+        const parsedBrewLogs = JSON.parse(brewLogsJsonValue);
+
+        if (parsedBrewLogs.length > 0){
+          brewLogs.push(...parsedBrewLogs);
+          console.log("Success!", parsedBrewLogs, brewLogs);
         } 
       }
 
@@ -37,7 +61,6 @@ export default function Dashboard({navigation}: any) {
   useFocusEffect(
     useCallback(() => {
       setRefresh(prev => !prev);
-      //getAllCoffeeData();
     }, [])
   );
 
@@ -64,8 +87,3 @@ export default function Dashboard({navigation}: any) {
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
-
-
-// Note to self: 
-// Add saving to each thing now (AddBrews, EditBrews, EditCoffee, AddGrinders, EditGrinder)
-// Then add loading for each one as well on the Dashboard

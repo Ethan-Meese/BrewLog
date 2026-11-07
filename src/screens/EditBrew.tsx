@@ -23,7 +23,7 @@ function BrewInput({label, value, onChange, placeholder, keyboardType = "default
 
 
 export default function EditBrew({navigation, route}: any) {
-  // add this
+
   const {brewToEdit, brewLogsArr, setBrewLogsArr} = route.params;
 
   const [brewMethod, setBrewMethod] = useState(brewToEdit._brewMethod);
@@ -49,7 +49,7 @@ export default function EditBrew({navigation, route}: any) {
   const ratio: string | null = !isNaN(doseNumber) && doseNumber > 0 && !isNaN(waterNumber) ? (waterNumber / doseNumber).toFixed(1) : null;
 
   const handleBrewUpdate = () => {
-    // store brew locally later
+    
     var updatedBrew: Brew = {
       _brewMethod: brewMethod, 
       _coffee: selectedCoffee,
@@ -64,7 +64,7 @@ export default function EditBrew({navigation, route}: any) {
       _notes: notes
     };
     console.log(updatedBrew);
-    // add this
+    
     const brewIndex = brewLogsArr.findIndex(
       (brew: Brew) => brew === brewToEdit
     );

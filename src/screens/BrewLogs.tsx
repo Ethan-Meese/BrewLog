@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
 import { Brew } from './AddBrew';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export let brewLogs:Brew[] = [];
 
@@ -19,15 +20,24 @@ export default function BrewLogs({navigation, route}: any) {
     setBrewLogsArr((currentLogs) => currentLogs.filter((brew) => brew !== brewtoRemove));
   };
 
-  //Edited this
   const editBrewLog = (brewtoEdit: Brew) => {
     navigation.navigate("Edit Brew", {brewToEdit: brewtoEdit, brewLogsArr, setBrewLogsArr});
   }
 
-  const handleBrewLogsUpdate = () =>{
-    brewLogs = brewLogsArr;
-    console.log(brewLogs);
-    navigation.goBack();
+  const handleBrewLogsUpdate = async() =>{
+
+    try{
+      brewLogs = brewLogsArr;
+      console.log(brewLogs);
+
+      const jsonValue = JSON.stringify(brewLogs);
+      await AsyncStorage.setItem('brewLogs', jsonValue);
+      console.log("Brew Log updated to Storage.");
+      navigation.goBack();
+    }
+    catch(e){
+      console.error(e);
+    }
   };
 
   useFocusEffect(
@@ -41,9 +51,6 @@ export default function BrewLogs({navigation, route}: any) {
     brewMethodButtons.add("Any")
   }, []);
 
-// changed index to 
-// The added code below should now display a button for each brew method. once clicked it will set the selectedBrewMethod to that brew. 
-// Then below that, those brews should display instead of every brew. Editing should not be effected.
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text>You have {brewLogsArr.length} brew logs!</Text>

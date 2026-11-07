@@ -7,6 +7,7 @@ import { Grinder } from './AddGrinder';
 import { coffees } from './Coffees';
 import { Coffee } from './AddCoffee';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface Brew {
   _brewMethod: string;
@@ -70,24 +71,33 @@ export default function AddBrew({navigation}: any) {
   const waterNumber: number = parseFloat(water);
   const ratio: string | null = !isNaN(doseNumber) && doseNumber > 0 && !isNaN(waterNumber) ? (waterNumber / doseNumber).toFixed(1) : null;
 
-  const handleBrewSave = () => {
-    // store brew locally later
-    var newBrew: Brew = {
-      _brewMethod: brewMethod, 
-      _coffee: selectedCoffee,
-      _coffeeDose: coffeeDose,
-      _water: water,
-      _ratio: ratio,
-      _waterTemp: waterTemp,
-      _time: time,
-      _grinder: selectedGrinder, 
-      _grindSize: grindSize, 
-      _rating: rating, 
-      _notes: notes
-    };
-    console.log(newBrew);
-    brewLogs.push(newBrew);
-    navigation.goBack();
+  const handleBrewSave = async () => {
+    try{
+
+      var newBrew: Brew = {
+        _brewMethod: brewMethod, 
+        _coffee: selectedCoffee,
+        _coffeeDose: coffeeDose,
+        _water: water,
+        _ratio: ratio,
+        _waterTemp: waterTemp,
+        _time: time,
+        _grinder: selectedGrinder, 
+        _grindSize: grindSize, 
+        _rating: rating, 
+        _notes: notes
+      };
+      console.log(newBrew);
+      brewLogs.push(newBrew);
+
+      const jsonValue = JSON.stringify(brewLogs);
+      await AsyncStorage.setItem('brewLogs', jsonValue);
+      console.log("Brew Log added to Storage.");
+      navigation.goBack();
+    }
+    catch(e){
+      console.error(e);
+    }
   };
 
 useFocusEffect(

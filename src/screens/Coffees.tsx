@@ -4,6 +4,7 @@ import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler
 import { Coffee } from './AddCoffee';
 import { useFocusEffect } from '@react-navigation/native';
 import { brewLogs } from './BrewLogs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export let coffees:Coffee[] = [];
 
@@ -15,32 +16,46 @@ export default function Coffees({navigation, route}: any) {
   const [refresh, setRefresh] = useState(false);
 
   
-  const handleCoffeesUpdate = () =>{
-    
-    coffees = coffeesArr;
+  const handleCoffeesUpdate = async () =>{
+    try{
+      coffees = coffeesArr;
 
-    // updates the coffees in the brewlog screen. Basically syncs it
-    brewLogs.forEach(brew => {
+      // updates the coffees in the brewlog screen. Basically syncs it
+      brewLogs.forEach(brew => {
 
-      const updatedCoffee = coffees.find(
-        coffee => coffee._index === brew._coffee?._index
-      );
+        const updatedCoffee = coffees.find(
+          coffee => coffee._index === brew._coffee?._index
+        );
 
-      if (updatedCoffee){
-        brew._coffee = updatedCoffee;
-      }
-      
-    });
+        if (updatedCoffee){
+          brew._coffee = updatedCoffee;
+        }
+        
+      });
 
-    console.log(coffees);
-    navigation.goBack();
+      console.log(coffees);
+
+      const jsonValue = JSON.stringify(coffees);
+      await AsyncStorage.setItem('coffees', jsonValue);
+      console.log("Coffee updated to Storage.");
+      navigation.goBack();
+    }
+    catch(e){
+      console.error(e);
+    }
   };
 
+  /* Keep for now just in case
   const removeCoffee = (index: number) =>{
     const tempCoffeeArr = [...coffeesArr];
     tempCoffeeArr.splice(index, 1);
     setCoffeesArr(tempCoffeeArr);
   };
+  */
+
+  const removeCoffee = (coffeeToRemove: Coffee) => {
+    setCoffeesArr((currentCoffees) => currentCoffees.filter((coffee) => coffee !== coffeeToRemove));
+  }
 
   const editCoffee = (coffee: Coffee) =>{
     navigation.navigate("Edit Coffee", {coffeeToEdit: coffee, coffeesArr, setCoffeesArr});
@@ -75,7 +90,7 @@ export default function Coffees({navigation, route}: any) {
               <Text>Notes: {coffee._notes !== "" ? coffee._notes : "N/A"}</Text>
               {isEditing && (
                 <>
-                  <Button title="Remove Coffee" onPress={ () => removeCoffee(index)}/>
+                  <Button title="Remove Coffee" onPress={ () => removeCoffee(coffee)}/>
                   <Button title="Edit Coffee" onPress={ () => editCoffee(coffee)}/>
                 </>
               )}
