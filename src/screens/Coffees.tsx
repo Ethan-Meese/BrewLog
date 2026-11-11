@@ -20,8 +20,9 @@ export default function Coffees({navigation, route}: any) {
     try{
       coffees = coffeesArr;
 
+
       // updates the coffees in the brewlog screen. Basically syncs it
-      brewLogs.forEach(brew => {
+      brewLogs.forEach(brew => {       
 
         const updatedCoffee = coffees.find(
           coffee => coffee._index === brew._coffee?._index
@@ -29,9 +30,14 @@ export default function Coffees({navigation, route}: any) {
 
         if (updatedCoffee){
           brew._coffee = updatedCoffee;
+
         }
-        
       });
+
+      // Here is where I update the brewlogs storage. To match with the updated code above
+      const jsonValueBrewLogs = JSON.stringify(brewLogs);
+      await AsyncStorage.setItem('brewLogs', jsonValueBrewLogs);
+      console.log("Brewlogs updated to storage.");
 
       console.log(coffees);
 

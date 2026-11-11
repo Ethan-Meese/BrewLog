@@ -127,24 +127,24 @@ export default function EditBrew({navigation, route}: any) {
         )}
         
 
-      <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} placeholder='Enter coffee dose...'/>
+      <BrewInput label='Coffee Dose' value={coffeeDose} onChange={setCoffeeDose} keyboardType='numeric' placeholder='Enter coffee dose...'/>
 
 
       {brewMethod !== "Espresso" &&(
         <>
-          <BrewInput label='Water Amount' value={water} onChange={setWater} placeholder='Enter water amount...' />
+          <BrewInput label='Water Amount' value={water} onChange={setWater} keyboardType='numeric' placeholder='Enter water amount...' />
           <Text>{ratio !== null ? `Ratio is 1:${ratio}` : "Enter dose and water to get the ratio"}</Text>
         </>
       )}
       
       {brewMethod === "Espresso" &&(
         <>
-        <BrewInput label='Espresso Yield' value={water} onChange={setWater} placeholder='Espresso yield...' />
+        <BrewInput label='Espresso Yield' value={water} onChange={setWater} keyboardType='numeric' placeholder='Espresso yield...' />
         <Text>{ratio !== null ? `Ratio is 1:${ratio}` : "Enter dose and yield to get the ratio"}</Text>
         </>
       )}
 
-      <BrewInput label='Water Tempature' value={waterTemp} onChange={setWaterTemp} placeholder='Enter water tempature...'/>
+      <BrewInput label='Water Tempature' value={waterTemp} onChange={setWaterTemp} keyboardType='numeric' placeholder='Enter water tempature...'/>
 
       <BrewInput label='Brew Time' value={time} onChange={setTime} placeholder='Enter brew time...' />
 
@@ -170,7 +170,7 @@ export default function EditBrew({navigation, route}: any) {
         <Button title="Add Grinder" onPress={() => navigation.navigate("Add Grinder")}/>
       )}
 
-      <BrewInput label='Grind Size' value={grindSize} onChange={setGrindSize} placeholder='Enter grind size...'/>
+      <BrewInput label='Grind Size' value={grindSize} onChange={setGrindSize} keyboardType='numeric' placeholder='Enter grind size...'/>
 
       <BrewInput label='Rating' value={rating} onChange={setRating} placeholder='Enter rating...'/>
 

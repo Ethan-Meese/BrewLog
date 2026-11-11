@@ -87,3 +87,5 @@ export default function Dashboard({navigation}: any) {
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
+
+// Save the brewlogs whenever I save the coffees or grinders.

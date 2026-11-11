@@ -163,7 +163,7 @@ export default function BrewLogs({navigation, route}: any) {
                   )}
 
                   {brew._water !== "" && (
-                  <Text>Water Dose: {brew._water}</Text>
+                  <Text>Yield: {brew._water}</Text>
                   )}
 
                   {brew._ratio !== null && (
@@ -175,7 +175,7 @@ export default function BrewLogs({navigation, route}: any) {
                   )}
 
                   {brew._time !== "" && (
-                  <Text>Coffee Dose: {brew._time}</Text>
+                  <Text>Time: {brew._time}</Text>
                   )}
 
 
@@ -192,6 +192,7 @@ export default function BrewLogs({navigation, route}: any) {
                   {brew._notes !== "" && (
                     <Text>Notes: {brew._notes}</Text>
                   )}
+                  <Text></Text>
 
                   {isEditing === true &&(
                     <>

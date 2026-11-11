@@ -30,6 +30,11 @@ export default function Ginders({navigation, route}: any) {
         }
       });
 
+            // Here is where I update the brewlogs storage. To match with the updated code above
+      const jsonValueBrewLogs = JSON.stringify(brewLogs);
+      await AsyncStorage.setItem('brewLogs', jsonValueBrewLogs);
+      console.log("Brewlogs updated to storage.");
+
       console.log(grinders);
 
       const jsonValue = JSON.stringify(grinders);
